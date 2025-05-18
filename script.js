@@ -1,8 +1,12 @@
 const canvas = document.getElementById("fireworks");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
 let fireworks = [];
 
@@ -59,16 +63,22 @@ function animate() {
 
   if (Math.random() < 0.05) createFirework();
 }
-
 animate();
 
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-
-// Music play button logic
 document.getElementById("playButton").addEventListener("click", () => {
-  document.getElementById("birthdaySong").play();
+  const music = document.getElementById("birthdaySong");
+  music.volume = 1.0;
+  music.play();
   document.getElementById("playButton").style.display = "none";
+});
+const playButton = document.getElementById("playButton");
+const song = document.getElementById("birthdaySong");
+
+playButton.addEventListener("click", () => {
+  song.volume = 1.0;
+  song.play().then(() => {
+    playButton.style.display = "none";
+  }).catch((error) => {
+    alert("Unable to play audio: " + error.message);
+  });
 });
